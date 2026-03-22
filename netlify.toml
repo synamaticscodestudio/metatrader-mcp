@@ -4,7 +4,7 @@
 
 [functions]
   included_files = ["mt5-vectors/**"] 
-  external_node_modules = ["@xenova/transformers", "@lancedb/lancedb"]
+  external_node_modules = ["@xenova/transformers", "@lancedb/lancedb","apache-arrow"]
 [[redirects]]
   from = "/mcp"
   to = "/.netlify/functions/mcp"
