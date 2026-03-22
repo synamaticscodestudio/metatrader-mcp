@@ -1,0 +1,39 @@
+name: Generate MT5 Vector Index
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/**' # Only run if documentation files change
+  workflow_dispatch: # Allows you to run it manually from the Actions tab
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/node-js@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Indexing Script
+        run: node scripts/build.js
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096" # Give it 4GB RAM for 6k files
+
+      - name: Commit and Push Index
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: automated update of MT5 vector index"
+          file_pattern: "mt5-vectors/*"
