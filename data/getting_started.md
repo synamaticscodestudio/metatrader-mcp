@@ -1,6 +1,6 @@
 # Getting Started (MetaTrader5SDK)
 
-|  | Getting Started | [](beginning.md "MetaTrader 5 API") [](system_requirements.md "System Requirements") |
+|  | Getting Started | [](readme.md "MetaTrader 5 API") [](system_requirements.md "System Requirements") |
 | --- | --- | --- |
 | --- | --- |
 
