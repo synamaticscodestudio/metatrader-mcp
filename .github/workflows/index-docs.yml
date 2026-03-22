@@ -28,7 +28,7 @@ jobs:
         run: npm install
 
       - name: Run Indexing Script
-        run: node scripts/build.js
+        run: node build.js
         env:
           NODE_OPTIONS: "--max-old-space-size=4096" # Give it 4GB RAM for 6k files
 
