@@ -1,0 +1,20 @@
+# PositionSelect (MetaTrader5SDK)
+
+|  | [ Report API ](reportapi.md "Report API") / [ Main Interface of Reports ](imtreportapi.md "Main Report Interface") / [ Trade Databases ](imtreportapi_trade.md "Trade Database Functions") / [ Positions ](imtreportapi_position.md "Positions")/ PositionSelect | [](imtreportapi_positiongetbyticket.md "PositionGetByTicket") [](imtreportapi_tradeinfo.md "Trading Data") |
+| --- | --- | --- |
+| --- | --- |
+
+IMTReportAPI::PositionSelect
+Request trading positions from a database according to specified criteria.
+MTAPIRES IMTReportAPI::PositionSelect( const IMTDatasetRequest* request, // Request description IMTDataset* dataset // Data set )  
+---  
+Parameters
+request
+[in] The [IMTDatasetRequest](imtdatasetrequest.md "IMTDatasetRequest") object which described the position request criteria.
+dataset
+[out] The [IMTDataset](imtdataset.md "IMTDataset") object to which positions received from the database in accordance with the request will be added. The object must be previously created using the [IMTReportAPI::DatasetAppend](imtreportapi_datasetappend.md "DatasetAppend") method.
+Returned Value
+An indication of successful completion is the [MT_RET_OK](retcodes_successful.md "Successful completion") response code. Otherwise, an error code will be returned.
+Note
+The method enables highly efficient sampling of relevant databases for quick report generation.
+The method allows requesting data related to any accounts available on the trade server and not only to the accounts which are accessible to the manager generating the report ([IMTConManager::GroupAdd](imtconmanager_groupadd.md "GroupAdd")).

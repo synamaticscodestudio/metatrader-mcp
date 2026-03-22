@@ -1,0 +1,23 @@
+# OrderDeleteBatch (MetaTrader5SDK)
+
+|  | [ Server API ](serverapi.md "Server API") / [ Main API Interface ](imtserverapi.md "Main API Interface") / [ Trade ](serverapi_trading.md "Trade") / [ Orders ](serverapi_trading_order.md "Orders")/ OrderDeleteBatch | [](imtserverapi_orderdelete.md "OrderDelete") [](imtserverapi_ordercancel.md "OrderCancel") |
+| --- | --- | --- |
+| --- | --- |
+
+IMTServerAPI::OrderDeleteBatch
+Delete open orders from a server database in bulk.
+MTAPIRES IMTServerAPI::OrderDeleteBatch( const UINT64*  tickets, // An array of tickets const UINT tickets_total, // The number of tickets in the array MTAPIRES* results // An array of results )  
+---  
+Parameters
+tickets
+[in] A pointer to an array of orders which you want to delete.
+tickets_total
+[in] The number of tickets in the 'tickets' array.
+results
+[out] An array with the result of the deletion of orders. The size of the 'results' array must be not less than that of 'tickets'.
+Return Value
+The [MT_RET_OK](retcodes_successful.md "Successful completion") response code means that all specified orders have been deleted. The [MT_RET_ERR_PARTIAL](retcodes_common.md "Common errors") response code means that only some of the orders have been deleted. For details, you should analyze the 'results' array. The result of deletion of each order from the 'tickets' array is added to the 'results' array. The index of a result corresponds to the index of a ticket in the source array.
+Note
+Deals can be deleted only from the plugins, which run on the same trade server where the orders were created. For all other plugins the response code [MT_RET_ERR_NOTMAIN](retcodes_api.md "API") will be returned. If the object is not found, the response code [MT_RET_ERR_NOTFOUND](retcodes_common.md "Common errors") will be returned.
+The bulk deletion works faster than the deletion of the same number of orders in a loop one by one using [IMTServerAPI::OrderDelete](imtserverapi_orderdelete.md "OrderDelete"). The faster operation is particularly noticeable when deleting orders of the same account.
+To improve performance, it is recommended to create arrays and perform group operations separately for each trading account.

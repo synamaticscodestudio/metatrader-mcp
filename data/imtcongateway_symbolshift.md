@@ -1,0 +1,24 @@
+# SymbolShift (MetaTrader5SDK)
+
+|  | [ Configuration Interfaces ](reference_configurations.md "Configuration Interfaces") / [ Gateways ](config_gateway.md "Gateways") / [ IMTConGateway ](imtcongateway.md "IMTConGateway")/ SymbolShift | [](imtcongateway_symbolupdate.md "SymbolUpdate") [](imtcongateway_symboldelete.md "SymbolDelete") |
+| --- | --- | --- |
+| --- | --- |
+
+IMTConGateway::SymbolShift
+Change the position of [a symbol](config_symbol.md "Symbols") in the list of symbols, for which the gateway transmits quotes and processes trade operations.
+C++
+MTAPIRES IMTConGateway::SymbolShift( const UINT pos, // Position of the symbol const int shift // Shift )  
+---  
+.NET (Gateway/Manager API)
+MTRetCode CIMTConGateway.SymbolShift( uint  pos, // Position of the symbol int shift // Shift )  
+---  
+Python (Manager API)
+MTConGateway.SymbolShift( pos, # Position of the symbol shift # Shift )  
+---  
+Parameters
+pos
+[in] Position of the symbol, starting with 0.
+shift
+[in] Shift from its current position. A negative value means the shift to the top of the list, a positive value - to its end.
+Return Value
+An indication of successful completion is the [MT_RET_OK](retcodes_successful.md "Successful completion") response code. Otherwise, an error code will be returned.

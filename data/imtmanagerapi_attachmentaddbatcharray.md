@@ -1,0 +1,25 @@
+# AttachmentAddBatchArray (MetaTrader5SDK)
+
+|  | [ Manager API ](managerapi.md "Manager API") / [ Manager Interface ](imtmanagerapi.md "Manager Interface") / [ Clients ](imtmanagerapi_clients.md "Clients")/ AttachmentAddBatchArray | [](imtmanagerapi_attachmentaddbatch.md "AttachmentAddBatch") [](imtmanagerapi_attachmentrequest.md "AttachmentRequest") |
+| --- | --- | --- |
+| --- | --- |
+
+IMTManagerAPI::AttachmentAddBatchArray
+Create attachment files for documents or comments in batch.
+C++
+MTAPIRES IMTManagerAPI::AttachmentAddBatchArray( IMTAttachment** attachments, // array of attachments const UINT comments_total, // number of attachments in the array MTAPIRES* results // array of results )  
+---  
+.NET
+MTRetCode CIMTManagerAPI.AttachmentAddBatchArray( CIMTAttachment[] attachments, // array of attachments MTRetCode[] retcodes // array of results )  
+---  
+Parameters
+attachments
+[in/out] Array of [attachment objects](imtattachment.md "IMTAttachment"). You input ready descriptions of attachments. At the output, the server fills the [IMTAttachment::RecordID](imtattachment_recordid.md "RecordID") in these attachments.
+attachments_total
+[in] The number of attachments in the 'attachments' array.
+results
+[out] An array with attachment creation results. The size of the 'results' array must not be less than that of 'attachments'.
+Return Value
+The [MT_RET_OK](retcodes_successful.md "Successful completion") response code means that all the specified comments have been created. The [MT_RET_ERR_PARTIAL](retcodes_common.md "Common errors") response code means that only some of the comments have been created. Analyze the 'results' array for more details of the execution results. The result of creation of each attachment from the 'attachments' array is added to 'results'. The index of a result corresponds to the index of an attachment in the source array.
+Note
+Once the attachment identifier is received, you can add the attachment to a document or a request by calling the [IMTDocument::AttachmenAdd](imtdocument_attachmentsadd.md "AttachmentsAdd") or [IMTComment::AttachmentAdd](imtcomment_attachmentsadd.md "AttachmentsAdd") respectively.

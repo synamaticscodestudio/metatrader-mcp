@@ -1,0 +1,33 @@
+# Insert (MetaTrader5SDK)
+
+|  | [ Tools ](reference_tools.md "Tools") / [ CMTStr ](cmtstr.md "CMTStr")/ Insert | [](cmtstr_append.md "Append") [](cmtstr_copy.md "Copy") |
+| --- | --- | --- |
+| --- | --- |
+
+CMTStr::Insert
+Add a substring at the specified position of the string object.
+void CMTStr::Insert( UINT pos, // Position LPCWSTR insstring // Substring )  
+---  
+Parameters
+pos
+[in] The position in which you want to add a substring. Numbering starts from 0.
+insstring
+[in] The substring to add.
+CMTStr::Insert
+Add a string object at the specified position of another string object.
+void CMTStr::Insert( UINT pos, // Position const CMTStr &insstring // String object )  
+---  
+Parameters
+pos
+[in] The position in which you want to add a string object. Numbering starts from 0.
+&insstring
+[in] The [CMTStr](cmtstr.md "CMTStr") string object that you want to add.
+CMTStr::Insert
+Add a character at the specified position of the string object.
+void CMTStr::Insert( UINT pos, // Position wchar_t inschar // Character )  
+---  
+Parameters
+pos
+[in] The position in which you want to add a character. Numbering starts from 0.
+inschar
+[in] The character that you want to add.

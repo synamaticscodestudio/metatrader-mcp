@@ -1,0 +1,19 @@
+# ReadDictionaryString (MetaTrader5SDK)
+
+|  | [ Report API ](reportapi.md "Report API") / [ Data Cache Interfaces ](reportapi_cache.md "Data Cache Interfaces") / [ IMTReportCache ](imtreportcache.md "IMTReportCache")/ ReadDictionaryString | [](imtreportcache_readdictionarypos.md "ReadDictionaryPos") [](imtreportcache_writebegin.md "WriteBegin") |
+| --- | --- | --- |
+| --- | --- |
+
+IMTReportCache::ReadDictionaryString
+Get the string (value) from a dictionary based on the position.
+MTAPIRES IMTReportCache::ReadDictionaryString( const UINT dictionary_id, // Dictionary identifier const UINT pos, // Position LPCWSTR& string // String )  
+---  
+Parameters
+dictionary_id
+[in] Dictionary identifier.
+pos
+[in] The position of the string in the dictionary.
+string
+[in] String.
+Return Value
+An indication of successful completion is the [MT_RET_OK](retcodes_successful.md "Successful completion") response code. Otherwise, an error code will be returned.

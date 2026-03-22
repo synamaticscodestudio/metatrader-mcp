@@ -1,0 +1,26 @@
+# FirewallNext (MetaTrader5SDK)
+
+|  | [ Manager API ](managerapi.md "Manager API") / [ Administrator Interface ](imtadminapi.md "Administrator Interface") / [ Configuration Databases ](imtadminapi_config.md "Configuration Functions") / [ Firewall ](imtadminapi_config_firewall.md "Functions")/ FirewallNext | [](imtadminapi_firewalltotal.md "FirewallTotal") [](imtadminapi_config_symbol.md "Functions") |
+| --- | --- | --- |
+| --- | --- |
+
+IMTAdminAPI::FirewallNext
+Get the firewall configuration by the index.
+C++
+MTAPIRES IMTAdminAPI::FirewallNext( const UINT pos, // Position of the configuration IMTConFirewall* config // Configuration )  
+---  
+.NET
+MTRetCode CIMTAdminAPI.FirewallNext( uint pos, // Position of the configuration CIMTConFirewall config // Configuration )  
+---  
+Python
+AdminAPI.FirewallNext( pos # Position of the configuration )  
+---  
+Parameters
+pos
+[in] Position of the configuration, starting with 0.
+config
+[out] An object of the firewall configuration. The config object must first be created using the [IMTAdminAPI::FirewallCreate](imtadminapi_firewallcreate.md "FirewallCreate") method.
+Return Value
+An indication of successful completion is the [MT_RET_OK](retcodes_successful.md "Successful completion") response code. Otherwise, an error code will be returned.
+Note
+This method copies the firewall configuration entry with a specified index to the config object.

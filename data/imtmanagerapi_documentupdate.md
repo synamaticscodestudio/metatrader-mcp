@@ -1,0 +1,21 @@
+# DocumentUpdate (MetaTrader5SDK)
+
+|  | [ Manager API ](managerapi.md "Manager API") / [ Manager Interface ](imtmanagerapi.md "Manager Interface") / [ Clients ](imtmanagerapi_clients.md "Clients")/ DocumentUpdate | [](imtmanagerapi_documentaddbatcharray.md "DocumentAddBatchArray") [](imtmanagerapi_documentupdatebatch.md "DocumentUpdateBatch") |
+| --- | --- | --- |
+| --- | --- |
+
+IMTManagerAPI::DocumentUpdate
+Change a document in the client record.
+C++
+MTAPIRES IMTManagerAPI::DocumentUpdate( IMTDocument* document // document object )  
+---  
+.NET
+MTRetCode CIMTManagerAPI.DocumentUpdate( CIMTDocument document // document object )  
+---  
+Parameters
+document
+[in] [Document object](imtdocument.md "IMTDocument").
+Return Value
+An indication of successful completion is the [MT_RET_OK](retcodes_successful.md "Successful completion") response code. Otherwise, an error has occurred that corresponds to the response code.
+Note
+A document can only be changed from the applications connected to the trading server, on which the client has been created ([IMTDocument::RelatedClient](imtdocument_relatedclient.md "RelatedClient")). The [MT_RET_ERR_NOTMAIN](retcodes_api.md "API") response code will be returned for all other applications. If the object is not found, the response code [MT_RET_ERR_NOTFOUND](retcodes_common.md "Common errors") will be returned.

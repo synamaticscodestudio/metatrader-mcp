@@ -1,0 +1,26 @@
+# LeverageUpdate (MetaTrader5SDK)
+
+|  | [ Manager API ](managerapi.md "Manager API") / [ Administrator Interface ](imtadminapi.md "Administrator Interface") / [ Configuration Databases ](imtadminapi_config.md "Configuration Functions") / [ Floating Margin ](imtadminapi_config_leverage.md "Floating Margin")/ LeverageUpdate | [](imtadminapi_leverageunsubscribe.md "LeverageUnsubscribe") [](imtadminapi_leverageupdatebatch.md "LeverageUpdateBatch") |
+| --- | --- | --- |
+| --- | --- |
+
+IMTAdminAPI::LeverageUpdate
+Add or update a floating margin configuration.
+C++
+MTAPIRES IMTAdminAPI::LeverageUpdate( IMTConLeverage* config // Configuration object )  
+---  
+.NET
+MTRetCode CIMTAdminAPI.LeverageUpdate( CIMTConLeverage config // Configuration object )  
+---  
+Python
+AdminAPI.LeverageUpdate( MTConLeverage config // Configuration object )  
+---  
+Parameters
+config
+[in] Floating margin configuration object [IMTConLeverage](imtconleverage.md "IMTConLeverage").
+Return Value
+An indication of a successful completion is the [MT_RET_OK](retcodes_successful.md "Successful completion") response code. Otherwise, the code of the encountered error is returned.
+Note
+When the method is called, the system checks whether the record being added already exists. If the record is found, the system updates it. Otherwise, a new entry is added. The comparison is based on the configuration name field [IMTConLeverage::Name](imtconleverage_name.md "Name"). If an attempt is made to add a completely identical record, no changes are made, and consequently, the notification method [IMTConLeverageSink::OnLeverageUpdate](imtconleveragesink_onleverageupdate.md "OnLeverageUpdate") is not called.
+A configuration can only be added or updated from the applications running on the main server. For all other applications, the response code [MT_RET_ERR_NOTMAIN](retcodes_common.md "Common errors") is returned.
+A record is validated before being added. If the record is incorrect, the error code [MT_RET_ERR_PARAMS](retcodes_common.md "Common errors") is returned.

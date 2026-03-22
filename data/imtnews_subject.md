@@ -1,0 +1,34 @@
+# Subject (MetaTrader5SDK)
+
+|  | [ Database Interfaces ](reference_bases.md "Database Interfaces") / [ News Database ](reference_news.md "News Database") / [ IMTNews ](imtnews.md "IMTNews")/ Subject | [](imtnews_id.md "ID") [](imtnews_category.md "Category") |
+| --- | --- | --- |
+| --- | --- |
+
+IMTNews::Subject
+Get the news subject.
+C++
+LPCWSTR IMTNews::Subject() const  
+---  
+.NET (Gateway/Manager API)
+string CIMTNews.Subject()  
+---  
+Return Value
+If successful, it returns a pointer to a string with the news subject. Otherwise, it returns NULL.
+Note
+The pointer to the resulting string is valid for the lifetime of the [IMTNews](imtnews.md "IMTNews") object.
+To use the line after the object removal (call of the [IMTNews::Release](imtnews_release.md "Release") method of this object), a copy of it should be created.
+IMTNews::Subject
+Set the news subject.
+C++
+MTAPIRES IMTNews::Subject( LPCWSTR subject // News subject )  
+---  
+.NET (Gateway/Manager API)
+MTRetCode CIMTNews.Subject( string subject // News subject )  
+---  
+Parameters
+subject
+[in] News subject.
+Return Value
+An indication of successful completion is the [MT_RET_OK](retcodes_successful.md "Successful completion") response code. Otherwise, an error has occurred that corresponds to the response code.
+Note
+The length of the news subject is not limited.

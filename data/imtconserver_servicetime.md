@@ -1,0 +1,35 @@
+# ServiceTime (MetaTrader5SDK)
+
+|  | [ Configuration Interfaces ](reference_configurations.md "Configuration Interfaces") / [ Network ](config_network.md "Network") / [ IMTConServer ](imtconserver.md "IMTConServer")/ ServiceTime | [](imtconserver_passwordcheck.md "PasswordCheck") [](imtconserver_adapterscurrent.md "AdaptersCurrent") |
+| --- | --- | --- |
+| --- | --- |
+
+IMTConServer::ServiceTime
+Get the service time (time of optimization), when various operations aimed at increasing the performance and reliability of the platform are conducted.
+C++
+UINT IMTConServer::ServiceTime() const  
+---  
+.NET (Gateway/Manager API)
+uint CIMTConServer.ServiceTime()  
+---  
+Python (Manager API)
+MTConServer.ServiceTime  
+---  
+Return Value
+Service time in minutes elapsed since 00:00.
+IMTConServer::ServiceTime
+Set the service time (time of optimization), when various operations aimed at increasing the performance and reliability of the platform are conducted.
+C++
+MTAPIRES IMTConServer::ServiceTime( const UINT stime // Service time )  
+---  
+.NET (Gateway/Manager API)
+MTRetCode CIMTConServer.ServiceTime( uint stime // Service time )  
+---  
+Python (Manager API)
+MTConServer.ServiceTime  
+---  
+Parameters
+stime
+[in] Service time in minutes elapsed since 00:00.
+Return Value
+An indication of successful completion is the [MT_RET_OK](retcodes_successful.md "Successful completion") response code. Otherwise, an error has occurred that corresponds to the response code.
