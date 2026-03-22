@@ -1,117 +1,90 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { pipeline } from "@xenova/transformers";
 import * as lancedb from "@lancedb/lancedb";
+import { express } from "express"; // Recommended for easier SSE routing
 import { z } from "zod";
-import fs from "fs/promises";
 import path from "path";
 
 // --- CONFIGURATION ---
-const DATA_DIR = "./data";
-const DB_PATH = "./mt5-vectors";
+const app = express();
+const PORT = process.env.PORT || 10000;
+const DB_PATH = path.resolve(process.cwd(), "mt5-vectors");
 
-// 1. Initialize the Embedding Pipeline (Local Model)
-// This model is small (~30MB) and runs fast on CPUs
-const embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
-
-async function getEmbedding(text) {
-    const output = await embedder(text, { pooling: 'mean', normalize: true });
-    return Array.from(output.data);
-}
-
-// 2. Intelligent Chunking Logic
-function splitByHeaders(content) {
-    // Splits by Markdown headers (# or ## or ###)
-    const sections = content.split(/(?=\n#{1,3} )/g);
-    return sections.filter(s => s.trim().length > 50); 
-}
-
-// 3. Database & Indexing Setup
-const db = await lancedb.connect(DB_PATH);
+// --- GLOBAL INSTANCES ---
+let embedder;
 let table;
 
-async function initDB() {
-    try {
-        const files = (await fs.readdir(DATA_DIR)).filter(f => f.endsWith('.md'));
-        const data = [];
-
-        process.stderr.write(`🔄 Indexing ${files.length} MetaTrader doc files...\n`);
-        
-        for (const file of files) {
-            const content = await fs.readFile(path.join(DATA_DIR, file), 'utf-8');
-            const chunks = splitByHeaders(content);
-
-            for (const chunk of chunks) {
-                const vector = await getEmbedding(chunk);
-                data.push({ 
-                    vector, 
-                    text: chunk, 
-                    fileName: file,
-                    title: chunk.split('\n')[0].replace(/#/g, '').trim() || file
-                });
-            }
-        }
-
-        // Create or overwrite the table with our vectorized data
-        table = await db.createTable('mt5_docs', data, { writeMode: 'overwrite' });
-        process.stderr.write(`✅ Vector DB Ready with ${data.length} semantic chunks.\n`);
-    } catch (error) {
-        process.stderr.write(`❌ Indexing failed: ${error.message}\n`);
-    }
+async function initResources() {
+    console.log("🚀 Initializing MT5 MCP Resources...");
+    
+    // 1. Load Embedding Model
+    embedder = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+    
+    // 2. Connect to LanceDB (Pre-indexed folder must exist)
+    const db = await lancedb.connect(DB_PATH);
+    table = await db.openTable("mt5_docs");
+    
+    console.log("✅ Resources Loaded & Vector DB Connected.");
 }
 
-// 4. Initialize the MCP Server
+// --- DEFINE MCP SERVER ---
 const server = new McpServer({
-    name: "metatrader-mcp-pro",
-    version: "2.0.0",
+    name: "metatrader-mcp-render",
+    version: "2.3.0",
 });
 
-// 5. Register the Search Tool (Modern Syntax)
+// Register the Search Tool
 server.tool(
     "search_mt5_sdk",
-    {
-        query: z.string().describe("The natural language question about MetaTrader 5 API, functions, or logic."),
-    },
+    { query: z.string().describe("Natural language query for MT5 SDK docs") },
     async ({ query }) => {
-        try {
-            const queryVector = await getEmbedding(query);
-            
-            // Perform vector similarity search
-            const results = await table
-                .search(queryVector)
-                .limit(5)
-                .execute();
+        const output = await embedder(query, { pooling: 'mean', normalize: true });
+        const queryVector = Array.from(output.data);
 
-            if (results.length === 0) {
-                return {
-                    content: [{ type: "text", text: "No relevant documentation found for that query." }]
-                };
-            }
+        const results = await table.search(queryVector).limit(5).execute();
+        
+        const formatted = results.map(r => 
+            `[FILE: ${r.fileName}]\n${r.text}\n---`
+        ).join("\n\n");
 
-            const formattedResults = results.map(r => 
-                `[Source: ${r.fileName}]\nSection: ${r.title}\n${r.text}\n---`
-            ).join("\n\n");
-
-            return {
-                content: [{ type: "text", text: formattedResults }]
-            };
-        } catch (error) {
-            return {
-                content: [{ type: "text", text: `Error performing search: ${error.message}` }],
-                isError: true
-            };
-        }
+        return { content: [{ type: "text", text: formatted }] };
     }
 );
 
-// 6. Start the Server using Stdio (Standard for Claude Desktop/Cursor)
-async function main() {
-    await initDB(); // Index files on startup
-    const transport = new StdioServerTransport();
+// --- HTTP & SSE ROUTES ---
+let transport = null;
+
+// 1. The SSE connection endpoint
+app.get("/sse", async (req, res) => {
+    console.log("🔌 New SSE connection request");
+    transport = new SSEServerTransport("/messages", res);
     await server.connect(transport);
+});
+
+// 2. The message handling endpoint (POST)
+app.post("/messages", async (req, res) => {
+    if (!transport) {
+        return res.status(400).send("No active SSE connection");
+    }
+    await transport.handlePostMessage(req, res);
+});
+
+// 3. Health check for Render
+app.get("/", (req, res) => {
+    res.send("MT5 MCP Server is Running via SSE. Connect to /sse");
+});
+
+// --- START SERVER ---
+async function start() {
+    await initResources();
+    app.listen(PORT, "0.0.0.0", () => {
+        console.log(`📡 MCP Server listening on port ${PORT}`);
+        console.log(`🔗 SSE Endpoint: http://0.0.0.0:${PORT}/sse`);
+    });
 }
 
-main().catch((error) => {
-    process.stderr.write(`Fatal error: ${error.message}\n`);
+start().catch(err => {
+    console.error("❌ Fatal Startup Error:", err);
     process.exit(1);
 });
