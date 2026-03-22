@@ -1,10 +1,9 @@
 [build]
-  command = "npm run build"
+  command = "npm install"
   publish = "public"
 
 [functions]
   node_bundle = true
-  # Xenova needs to stay as an external module to avoid bundling issues with the WASM/model files
   external_node_modules = ["@xenova/transformers", "@lancedb/lancedb"]
 
 [[redirects]]
