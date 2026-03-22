@@ -3,7 +3,6 @@
   publish = "public"
 
 [functions]
-  node_bundle = true
   external_node_modules = ["@xenova/transformers", "@lancedb/lancedb"]
 
 [[redirects]]
