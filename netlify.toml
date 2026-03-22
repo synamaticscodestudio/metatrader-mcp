@@ -1,6 +1,7 @@
 [build]
   command = "npm install"
-  publish = "public"
+  # Change this to "." if you want the root to be the publish directory
+  publish = "." 
 
 [functions]
   external_node_modules = ["@xenova/transformers", "@lancedb/lancedb"]
