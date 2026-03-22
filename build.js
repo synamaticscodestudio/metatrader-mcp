@@ -3,7 +3,7 @@ import * as lancedb from "@lancedb/lancedb";
 import fs from "fs/promises";
 import path from "path";
 
-const DATA_DIR = "./data";
+const DATA_DIR = "./";
 const DB_PATH = "./mt5-vectors";
 
 async function buildIndex() {
