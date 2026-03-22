@@ -1,11 +1,10 @@
 [build]
-  command = "npm install"
-  # Change this to "." if you want the root to be the publish directory
-  publish = "." 
+  command = "npm run build"
+  publish = "public"
 
 [functions]
+  included_files = ["mt5-vectors/**"] 
   external_node_modules = ["@xenova/transformers", "@lancedb/lancedb"]
-
 [[redirects]]
   from = "/mcp"
   to = "/.netlify/functions/mcp"

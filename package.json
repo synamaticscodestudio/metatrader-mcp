@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js && mkdir -p public && echo '<h1>MT5 MCP Active</h1>' > public/index.html"
+  },
   "repository": "git@github.com:synamaticscodestudio/metatrader-mcp.git",
   "author": "Vishnu Raj Bijuraj Sheeja <synamatics@gmail.com>",
   "license": "MIT",
