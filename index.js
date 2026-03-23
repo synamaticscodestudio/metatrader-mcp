@@ -104,18 +104,25 @@ const transports = new Map();
 app.get("/sse", async (req, res) => {
     console.log("🔌 New SSE Connection Request");
     
-    // SSEServerTransport (All-Caps) is the current standard in the SDK
+    // 1. Create the transport
     const transport = new SSEServerTransport("/messages", res);
     
-    // Standard session management
+    // 2. IMPORTANT: Do not use 'await server.connect(transport)' 
+    // instead, use the server's own 'connect' method via the transport handler
+    // or simply use the server to handle the transport's lifecycle:
+    await server.connect(transport);
+    
+    // 3. Manage the session
     transports.set(transport.sessionId, transport);
     
-    res.on("close", () => {
-        transports.delete(transport.sessionId);
-        console.log(`❌ Session ${transport.sessionId} closed.`);
-    });
+    console.log(`✅ Session started: ${transport.sessionId}`);
 
-    await server.connect(transport);
+    res.on("close", async () => {
+        console.log(`❌ Session closed: ${transport.sessionId}`);
+        transports.delete(transport.sessionId);
+        // Clean up the connection so the server is "free" again
+        await transport.close();
+    });
 });
 
 app.post("/messages", express.json(), async (req, res) => {
